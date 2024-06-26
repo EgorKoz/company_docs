@@ -1,0 +1,21 @@
+{% extends 'base_page.html' %}
+
+{% block body %}
+
+<div class="container">
+  {{ company.main_page_info }}
+</div>
+<div class="container">
+
+  <br>
+  {% for news in company.news_set.all %}
+    <h2>
+      <span>{{ news.value }}</span>
+    </h2>
+    <p class="date">Published {{ news.created_at }}</p>
+    <br>
+  {% endfor %}
+</div>
+
+
+{% endblock %}
