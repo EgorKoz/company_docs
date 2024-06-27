@@ -82,7 +82,12 @@ class QuestionnaireView(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.user = self.request.user
-        instance.file = form.make_docs_template()
+        file = form.make_docs_template()
+        if not file:
+            messages.success(self.request, 'Error. Try one.')
+
+            return redirect('questionnaire')
+        instance.file = file
         instance.save()
         return super().form_valid(form)
 
@@ -136,12 +141,9 @@ def profile_handler(request):
 @login_required
 @redirect_not_admin_user
 def news_handler(request):
-    print('news_handler')
     if request.method == 'POST':
         form = NewsCreateForm(request.POST, prefix='news')
-        print('post')
         if form.is_valid():
-            print('valid')
             form = form.save(commit=False)
             form.company = request.user.profile.company
             form.save()

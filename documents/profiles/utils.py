@@ -1,13 +1,10 @@
 from docxtpl import DocxTemplate
-from datetime import datetime
+from django.conf import settings
+from pathlib import Path
 
 
 def generate_word(path, params):
-    doc = DocxTemplate(
-        r"C:\Users\ekozlov\PycharmProjects\company_docs\documents\tmp.docx")
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    doc = DocxTemplate(settings.MEDIA_ROOT / 'tmp.docx')
     doc.render(params)
-    date = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    doc.save(
-        rf"C:\Users\ekozlov\PycharmProjects\company_docs\documents\mediafiles\tmp_{date}.docx")
-
-    return rf"C:\Users\ekozlov\PycharmProjects\company_docs\documents\mediafiles\tmp_{date}.docx"
+    doc.save(path)

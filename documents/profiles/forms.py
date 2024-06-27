@@ -33,9 +33,9 @@ class QuestionnaireForm(forms.ModelForm):
 
     def generate_file_name(self):
         from datetime import datetime
-        directory = self.instance.user.profile.directory()
+        directory = self.instance.user
         date = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-        return f'{directory}/{date}.docx'
+        return f'{directory}/{date}.pdf'
 
     def convert_data(self):
         date = self.cleaned_data['test_date']
@@ -51,7 +51,13 @@ class QuestionnaireForm(forms.ModelForm):
         self.convert_choice()
         self.convert_data()
         self.cleaned_data['id'] = self.instance.id
-        return generate_word(file, self.cleaned_data)
+        try:
+            generate_word(file, self.cleaned_data)
+        except Exception as e:
+            print(e)
+            file = None
+
+        return file
 
 
 class ProfileCreateForm(forms.ModelForm):

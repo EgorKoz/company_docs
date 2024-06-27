@@ -47,9 +47,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'Profile for user {self.user.username}'
 
-    def directory(self):
-        return settings.MEDIA_ROOT / self.user.username
-
 
 class Questionnaire(models.Model):
     GROUP_CHOICES = (
