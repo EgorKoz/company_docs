@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, News, Company, Position
+from .models import Profile, News, Company, Position, Questionnaire
 
 
 @admin.register(Profile)
@@ -20,3 +20,8 @@ class CompanyAdmin(admin.ModelAdmin):
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
     list_display = ('value',)
+
+
+@admin.register(Questionnaire)
+class QuestionnaireAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'test_date')

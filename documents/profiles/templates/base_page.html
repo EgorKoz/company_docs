@@ -5,29 +5,29 @@
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
           <div class="col-md-3 mb-2 mb-md-0">
             <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-              <span class="fs-4">{{ company.header }}</span>
+              <span class="fs-4">{{ request.user.profile.company.header }}</span>
             </a>
           </div>
 
           <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2">Features</a></li>
-            <li><a href="#" class="nav-link px-2">Pricing</a></li>
-            <li><a href="#" class="nav-link px-2">FAQs</a></li>
-            <li><a href="#" class="nav-link px-2">About</a></li>
+            <li><a href="{%url 'main_view'%}" class="nav-link px-2 link-secondary">Главная</a></li>
+            <li><a href="{%url 'questionnaire'%}" class="nav-link px-2">Форма</a></li>
+              {% if request.user.profile.is_admin %}
+                <li><a href="{%url 'settings'%}" class="nav-link px-2">Настройки</a></li>
+              {% endif %}
           </ul>
 
           <div class="col-md-3 text-end">
             <span> Hi, {{ request.user }}</span>
-            <button type="button" class="btn btn-outline-primary me-2">Logout</button>
+            <a class="btn btn-secondary" href="{%url 'logout' %}" role="button">Logout</a>
           </div>
         </header>
     </div>
     {% block body %}
     {% endblock %}
-    <div class="fixed-bottom">
+    <div class="container">
       <footer class="py-3 my-4">
-        <p class="text-center text-body-secondary">© 2024 {{ company.footer }}, Inc</p>
+        <p class="text-center text-body-secondary">© 2024 {{ request.user.profile.company.footer }}, Inc</p>
       </footer>
     </div>
 
