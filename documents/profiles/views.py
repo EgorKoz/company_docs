@@ -104,7 +104,7 @@ def delete_questionnaire(request, pk):
 @redirect_not_admin_user
 def settings_view(request):
     user_form = UserCreateForm(prefix='user')
-    profile_form = ProfileCreateForm(prefix='profile')
+    profile_form = ProfileCreateForm(prefix='profile', request=request)
     news_form = NewsCreateForm(prefix='news')
     position_form = PositionCreateForm(prefix='position')
 
@@ -125,7 +125,8 @@ def settings_view(request):
 def profile_handler(request):
     if request.method == 'POST':
         user_form = UserCreateForm(request.POST, prefix='user')
-        profile_form = ProfileCreateForm(request.POST, prefix='profile')
+        profile_form = ProfileCreateForm(
+            request.POST, prefix='profile', request=request)
         if all([user_form.is_valid(), profile_form.is_valid()]):
             user = user_form.save(commit=False)
             user.set_password(user_form.cleaned_data['password'])
@@ -157,6 +158,7 @@ def position_handler(request):
     if request.method == 'POST':
         form = PositionCreateForm(request.POST, prefix='position')
         if form.is_valid():
-            form.save()
+            item = form.save()
+            item.company.add(request.user.profile.company)
 
     return redirect('settings')

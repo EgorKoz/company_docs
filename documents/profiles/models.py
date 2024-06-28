@@ -4,18 +4,19 @@ from django.db import models
 from django.conf import settings
 
 
-class Position(models.Model):
-    value = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.value
-
-
 class Company(models.Model):
     value = models.CharField(max_length=100)
     header = models.TextField(max_length=1000)
     main_page_info = models.TextField(max_length=1000)
     footer = models.TextField(max_length=1000)
+
+    def __str__(self):
+        return self.value
+
+
+class Position(models.Model):
+    value = models.CharField(max_length=100)
+    company = models.ManyToManyField(Company, related_name='position')
 
     def __str__(self):
         return self.value

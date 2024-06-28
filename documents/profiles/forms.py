@@ -47,10 +47,11 @@ class QuestionnaireForm(forms.ModelForm):
             self.cleaned_data[item] = dict(self.fields[item].choices)[data]
 
     def make_docs_template(self):
+        import random
         file = self.generate_file_name()
         self.convert_choice()
         self.convert_data()
-        self.cleaned_data['id'] = self.instance.id
+        self.cleaned_data['id'] = random.randint(10, 15)
         try:
             generate_word(file, self.cleaned_data)
         except Exception as e:
@@ -64,6 +65,12 @@ class ProfileCreateForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('user', 'company')
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
+        super(ProfileCreateForm, self).__init__(*args, **kwargs)
+        self.fields['position'].queryset = Position.objects.filter(
+            company=request.user.profile.company)
 
 
 class UserCreateForm(forms.ModelForm):
@@ -81,4 +88,4 @@ class NewsCreateForm(forms.ModelForm):
 class PositionCreateForm(forms.ModelForm):
     class Meta:
         model = Position
-        exclude = ()
+        exclude = ('company',)
